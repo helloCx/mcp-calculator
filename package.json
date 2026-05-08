@@ -1,0 +1,26 @@
+{
+  "name": "calculator-mcp",
+  "version": "1.0.0",
+  "description": "A calculator MCP server — add, subtract, multiply, divide, power, sqrt, modulo",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "calculator-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "mcp",
+    "calculator",
+    "model-context-protocol"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "express": "^5.2.1"
+  }
+}
