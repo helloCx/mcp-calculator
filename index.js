@@ -1,9 +1,6 @@
-#!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { z } from "zod";
-import express from "express";
 
 const server = new McpServer({
   name: "calculator",
@@ -82,35 +79,6 @@ server.tool(
   }
 );
 
-const mode = process.env.TRANSPORT || "stdio";
+const transport = new StdioServerTransport();
+server.connect(transport);
 
-if (mode === "http") {
-  const PORT = process.env.PORT || 3000;
-  const app = express();
-  const sessions = new Map();
-
-  app.get("/sse", async (req, res) => {
-    const transport = new SSEServerTransport("/messages", res);
-    sessions.set(transport.sessionId, transport);
-    res.on("close", () => sessions.delete(transport.sessionId));
-    await server.connect(transport);
-  });
-
-  app.post("/messages", express.json(), async (req, res) => {
-    const sessionId = req.query.sessionId;
-    const transport = sessions.get(sessionId);
-    if (!transport) {
-      res.status(404).json({ error: "Session not found" });
-      return;
-    }
-    await transport.handlePostMessage(req, res);
-  });
-
-  app.listen(PORT, () => {
-    console.error(`Calculator MCP server running on http://0.0.0.0:${PORT}`);
-    console.error(`SSE endpoint: http://0.0.0.0:${PORT}/sse`);
-  });
-} else {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-}
