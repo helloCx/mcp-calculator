@@ -1,11 +1,11 @@
 {
-  "name": "calculator-mcp",
+  "name": "joey-calculator-mcp",
   "version": "1.0.0",
   "description": "A calculator MCP server — add, subtract, multiply, divide, power, sqrt, modulo",
   "type": "module",
   "main": "index.js",
   "bin": {
-    "calculator-mcp": "./index.js"
+    "joey-calculator-mcp": "./index.js"
   },
   "scripts": {
     "start": "node index.js"
